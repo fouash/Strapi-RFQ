@@ -9,13 +9,34 @@ import type { BuildOptions } from '../build';
 import { getPackageManager } from './managers';
 
 /**
- * From V5 this will be imported from the package.json of `@strapi/strapi`.
+ * Get peer dependencies from @strapi/strapi package.json instead of hardcoding
  */
-const PEER_DEPS = {
-  react: '^18.0.0',
-  'react-dom': '^18.0.0',
-  'react-router-dom': '^6.0.0',
-  'styled-components': '^6.0.0',
+const getStrapiPeerDependencies = (): Record<string, string> => {
+  try {
+    // Get the path to @strapi/strapi package.json
+    const strapiPackagePath = path.join(__dirname, '..', '..', '..', 'package.json');
+    const strapiPackageJson = require(strapiPackagePath);
+    
+    if (strapiPackageJson.peerDependencies) {
+      return strapiPackageJson.peerDependencies;
+    }
+    
+    // Fallback to default values if peerDependencies not found
+    return {
+      react: '^17.0.0 || ^18.0.0',
+      'react-dom': '^17.0.0 || ^18.0.0',
+      'react-router-dom': '^6.0.0',
+      'styled-components': '^6.0.0',
+    };
+  } catch (error) {
+    // Fallback to default values if package.json cannot be read
+    return {
+      react: '^17.0.0 || ^18.0.0',
+      'react-dom': '^17.0.0 || ^18.0.0',
+      'react-router-dom': '^6.0.0',
+      'styled-components': '^6.0.0',
+    };
+  }
 };
 
 interface CheckRequiredDependenciesResult {
@@ -65,6 +86,11 @@ const checkRequiredDependencies = async ({
   }
 
   /**
+   * Get the current peer dependencies from @strapi/strapi package.json
+   */
+  const PEER_DEPS = getStrapiPeerDependencies();
+
+  /**
    * Run through each of the peer deps and figure out if they need to be
    * installed or they need their version checked against.
    */
@@ -73,11 +99,15 @@ const checkRequiredDependencies = async ({
     review: DepToReview[];
   }>(
     (acc, [name, version]) => {
-      if (!pkg.packageJson.dependencies) {
-        throw new Error(`Could not find dependencies in package.json at path: ${cwd}`);
+      // Check both dependencies and devDependencies for more comprehensive checking
+      const dependencies = pkg.packageJson.dependencies || {};
+      const devDependencies = pkg.packageJson.devDependencies || {};
+      
+      if (!dependencies && !devDependencies) {
+        throw new Error(`Could not find dependencies or devDependencies in package.json at path: ${cwd}`);
       }
 
-      const declaredVersion = pkg.packageJson.dependencies[name];
+      const declaredVersion = dependencies[name] || devDependencies[name];
 
       if (!declaredVersion) {
         acc.install.push({
@@ -154,11 +184,13 @@ const checkRequiredDependencies = async ({
       const installedVersion = await getModuleVersion(dep.name, cwd);
 
       if (!installedVersion) {
-        /**
-         * TODO: when we know the packageManager we can advise the actual install command.
-         */
+        const packageManager = getPackageManager();
+        const installCmd = packageManager === 'npm' ? 'npm install' : 
+                          packageManager === 'yarn' ? 'yarn add' : 
+                          packageManager === 'pnpm' ? 'pnpm add' : 'npm install';
+        
         errors.push(
-          `The declared dependency, ${dep.name} is not installed. You should install before re-running this command`
+          `The declared dependency, ${dep.name} is not installed. Run "${installCmd} ${dep.name}" to install it.`
         );
       } else if (!semver.satisfies(installedVersion, dep.wantedVersion)) {
         logger.warn(
