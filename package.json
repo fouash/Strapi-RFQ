@@ -44,8 +44,13 @@
   },
   "jest": {
     "testEnvironment": "node",
-    "roots": ["<rootDir>/tests", "<rootDir>/src"],
-    "testMatch": ["**/*.test.js"],
+    "roots": [
+      "<rootDir>/tests",
+      "<rootDir>/src"
+    ],
+    "testMatch": [
+      "**/*.test.js"
+    ],
     "collectCoverageFrom": [
       "src/**/*.{js,ts}",
       "!src/**/*.d.ts"
