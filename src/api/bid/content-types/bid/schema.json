@@ -1,0 +1,77 @@
+{
+  "kind": "collectionType",
+  "collectionName": "bids",
+  "info": {
+    "singularName": "bid",
+    "pluralName": "bids",
+    "displayName": "Bid",
+    "description": "Collection type for vendor bids on RFQs"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "price": {
+      "type": "decimal",
+      "required": true,
+      "min": 0
+    },
+    "currency": {
+      "type": "string",
+      "default": "SAR"
+    },
+    "proposal": {
+      "type": "richtext",
+      "required": true
+    },
+    "deliveryTime": {
+      "type": "integer",
+      "required": true,
+      "description": "Delivery time in days"
+    },
+    "attachments": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": ["files"]
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "submitted",
+        "under_review",
+        "accepted",
+        "rejected",
+        "awarded"
+      ],
+      "default": "submitted"
+    },
+    "submittedAt": {
+      "type": "datetime",
+      "required": true
+    },
+    "validUntil": {
+      "type": "datetime",
+      "required": true
+    },
+    "notes": {
+      "type": "text"
+    },
+    "isWinning": {
+      "type": "boolean",
+      "default": false
+    },
+    "vendor": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::vendor.vendor",
+      "inversedBy": "bids"
+    },
+    "rfq": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::rfq.rfq",
+      "inversedBy": "bids"
+    }
+  }
+}

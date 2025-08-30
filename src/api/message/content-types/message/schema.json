@@ -1,0 +1,90 @@
+{
+  "kind": "collectionType",
+  "collectionName": "messages",
+  "info": {
+    "singularName": "message",
+    "pluralName": "messages",
+    "displayName": "Message",
+    "description": "Internal communication system for buyers and vendors"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "subject": {
+      "type": "string",
+      "required": true,
+      "maxLength": 255
+    },
+    "content": {
+      "type": "text",
+      "required": true
+    },
+    "isRead": {
+      "type": "boolean",
+      "default": false
+    },
+    "readAt": {
+      "type": "datetime"
+    },
+    "priority": {
+      "type": "enumeration",
+      "enum": [
+        "low",
+        "normal", 
+        "high",
+        "urgent"
+      ],
+      "default": "normal"
+    },
+    "messageType": {
+      "type": "enumeration",
+      "enum": [
+        "inquiry",
+        "clarification",
+        "negotiation",
+        "update",
+        "system"
+      ],
+      "default": "inquiry"
+    },
+    "attachments": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": ["files"]
+    },
+    "sender": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "recipient": {
+      "type": "relation",
+      "relation": "manyToOne", 
+      "target": "plugin::users-permissions.user"
+    },
+    "rfq": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::rfq.rfq"
+    },
+    "bid": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::bid.bid"
+    },
+    "parentMessage": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::message.message",
+      "inversedBy": "replies"
+    },
+    "replies": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::message.message",
+      "mappedBy": "parentMessage"
+    }
+  }
+}

@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - RFQ Platform</title>
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .dashboard-container {
+            margin-top: 80px;
+            padding: 2rem 0;
+        }
+        
+        .dashboard-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+        
+        .dashboard-title {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .dashboard-subtitle {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .dashboard-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+        
+        .dashboard-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: var(--dark-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+        }
+        
+        .quick-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+        
+        .action-btn {
+            background: var(--primary-color);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .action-btn:hover {
+            background: var(--primary-hover);
+            color: white;
+        }
+        
+        .action-btn.secondary {
+            background: var(--secondary-color);
+        }
+        
+        .recent-list {
+            list-style: none;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .recent-item {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: between;
+            align-items: center;
+        }
+        
+        .recent-item:last-child {
+            border-bottom: none;
+        }
+        
+        .recent-title {
+            font-weight: 500;
+            color: var(--dark-color);
+            margin-bottom: 0.25rem;
+        }
+        
+        .recent-meta {
+            font-size: 0.85rem;
+            color: var(--secondary-color);
+        }
+        
+        .status-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+        
+        .status-published { background: #dcfdf7; color: #059669; }
+        .status-draft { background: #fef3c7; color: #d97706; }
+        .status-closed { background: #fee2e2; color: #dc2626; }
+        .status-awarded { background: #dbeafe; color: #2563eb; }
+        .status-submitted { background: #e0e7ff; color: #6366f1; }
+        
+        .hidden { display: none !important; }
+        
+        .favorites-section {
+            margin-top: 2rem;
+        }
+        
+        .favorites-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+        
+        .tab-btn {
+            padding: 0.75rem 1rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--secondary-color);
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+        
+        .tab-btn.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+        
+        .notification-item {
+            padding: 1rem;
+            background: var(--light-color);
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .notification-title {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+        
+        .notification-time {
+            font-size: 0.85rem;
+            color: var(--secondary-color);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-container">
+                <div class="logo">
+                    <a href="/">
+                        <h2>RFQ Platform</h2>
+                    </a>
+                </div>
+                
+                <div class="nav-links">
+                    <a href="/" class="nav-link">
+                        <i class="fas fa-home"></i> Home
+                    </a>
+                    <a href="/rfq.html" class="nav-link">
+                        <i class="fas fa-search"></i> Browse RFQs
+                    </a>
+                    
+                    <div class="nav-item dropdown">
+                        <button class="nav-link dropdown-toggle" data-toggle="dropdown">
+                            <i class="fas fa-bell"></i> 
+                            <span class="notification-badge" id="notificationCount">0</span>
+                        </button>
+                        <div class="dropdown-menu notification-dropdown">
+                            <div class="dropdown-header">Notifications</div>
+                            <div id="notificationList">
+                                <div class="dropdown-item text-muted">No new notifications</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="nav-item dropdown user-dropdown">
+                        <button class="nav-link dropdown-toggle" data-toggle="dropdown" id="userMenuButton">
+                            <i class="fas fa-user-circle"></i> 
+                            <span id="userName">Guest</span>
+                        </button>
+                        <div class="dropdown-menu">
+                            <div class="auth-section" id="guestMenu">
+                                <a class="dropdown-item" href="#" onclick="showLoginModal()">
+                                    <i class="fas fa-sign-in-alt"></i> Login
+                                </a>
+                                <a class="dropdown-item" href="#" onclick="showSignupModal()">
+                                    <i class="fas fa-user-plus"></i> Sign Up
+                                </a>
+                            </div>
+                            <div class="auth-section hidden" id="userMenu">
+                                <a class="dropdown-item" href="/dashboard.html">
+                                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                                </a>
+                                <a class="dropdown-item" href="/profile.html" id="profileLink">
+                                    <i class="fas fa-user"></i> My Profile
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#" onclick="logout()">
+                                    <i class="fas fa-sign-out-alt"></i> Logout
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="nav-toggle" onclick="toggleMobileMenu()">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="dashboard-container">
+        <!-- Dashboard Header -->
+        <div class="dashboard-header">
+            <div class="container">
+                <h1 class="dashboard-title" id="dashboardTitle">Welcome to Your Dashboard</h1>
+                <p class="dashboard-subtitle" id="dashboardSubtitle">Manage your RFQs and business activities</p>
+            </div>
+        </div>
+
+        <div class="container">
+            <!-- Statistics -->
+            <div class="stats-grid" id="statsGrid">
+                <!-- Stats will be populated by JavaScript -->
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions" id="quickActions">
+                <!-- Actions will be populated by JavaScript -->
+            </div>
+
+            <!-- Dashboard Content Grid -->
+            <div class="dashboard-grid">
+                <!-- Recent RFQs/Bids -->
+                <div class="dashboard-card" id="recentActivity">
+                    <h3><i class="fas fa-clock"></i> Recent Activity</h3>
+                    <ul class="recent-list" id="recentList">
+                        <li class="recent-item">
+                            <div class="text-muted">Loading recent activity...</div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Notifications -->
+                <div class="dashboard-card">
+                    <h3><i class="fas fa-bell"></i> Notifications</h3>
+                    <div id="dashboardNotifications">
+                        <div class="notification-item">
+                            <div class="notification-title">Welcome!</div>
+                            <div class="notification-time">Get started by exploring the platform</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analytics/Charts -->
+                <div class="dashboard-card">
+                    <h3><i class="fas fa-chart-bar"></i> Analytics</h3>
+                    <div id="analyticsChart">
+                        <canvas id="activityChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+
+                <!-- Favorites -->
+                <div class="dashboard-card">
+                    <h3><i class="fas fa-heart"></i> Favorites</h3>
+                    <div class="favorites-section">
+                        <div class="favorites-tabs">
+                            <button class="tab-btn active" onclick="showFavoritesTab('rfqs')">RFQs</button>
+                            <button class="tab-btn" onclick="showFavoritesTab('vendors')">Vendors</button>
+                            <button class="tab-btn" onclick="showFavoritesTab('buyers')">Buyers</button>
+                        </div>
+                        <div id="favoritesContent">
+                            <div class="text-muted">No favorites yet</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Login</h2>
+                <button class="modal-close" onclick="closeModal('loginModal')">&times;</button>
+            </div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" name="password" required>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Login</button>
+                    <a href="#" onclick="showSignupModal(); closeModal('loginModal');">Don't have an account? Sign up</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div class="modal" id="signupModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Sign Up</h2>
+                <button class="modal-close" onclick="closeModal('signupModal')">&times;</button>
+            </div>
+            <form id="signupForm">
+                <div class="form-group">
+                    <label for="signupEmail">Email</label>
+                    <input type="email" id="signupEmail" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupPassword">Password</label>
+                    <input type="password" id="signupPassword" name="password" required>
+                </div>
+                <div class="form-group">
+                    <label for="userType">I am a:</label>
+                    <select id="userType" name="userType" required onchange="toggleUserTypeFields()">
+                        <option value="">Select user type</option>
+                        <option value="buyer">Buyer (Looking for services)</option>
+                        <option value="vendor">Vendor (Providing services)</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Sign Up</button>
+                    <a href="#" onclick="showLoginModal(); closeModal('signupModal');">Already have an account? Login</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/assets/js/main.js"></script>
+    <script src="/assets/js/dashboard.js"></script>
+</body>
+</html>

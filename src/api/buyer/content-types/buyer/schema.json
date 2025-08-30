@@ -1,0 +1,85 @@
+{
+  "kind": "collectionType",
+  "collectionName": "buyers",
+  "info": {
+    "singularName": "buyer",
+    "pluralName": "buyers",
+    "displayName": "Buyer",
+    "description": "Collection type for buyers in the RFQ platform"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "companyName": {
+      "type": "string",
+      "required": true,
+      "maxLength": 255
+    },
+    "contactPerson": {
+      "type": "string",
+      "required": true,
+      "maxLength": 255
+    },
+    "email": {
+      "type": "email",
+      "required": true,
+      "unique": true
+    },
+    "phone": {
+      "type": "string",
+      "required": true
+    },
+    "vatNumber": {
+      "type": "string",
+      "regex": "^3[0-9]{14}$",
+      "description": "Saudi VAT Number (15 digits starting with 3)"
+    },
+    "commercialRegistration": {
+      "type": "string",
+      "regex": "^[0-9]{10}$",
+      "description": "Commercial Registration (10 digits)"
+    },
+    "nationalAddress": {
+      "type": "string",
+      "regex": "^[0-9]{8}$",
+      "description": "National Address (8 digits)"
+    },
+    "additionalNumbers": {
+      "type": "json",
+      "description": "Additional registration numbers (AVL, NWC, SE, MODON)"
+    },
+    "address": {
+      "type": "text"
+    },
+    "city": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string",
+      "default": "Saudi Arabia"
+    },
+    "website": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    },
+    "isVerified": {
+      "type": "boolean",
+      "default": false
+    },
+    "user": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "rfqs": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::rfq.rfq",
+      "mappedBy": "buyer"
+    }
+  }
+}

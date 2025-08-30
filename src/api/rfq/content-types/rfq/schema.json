@@ -1,0 +1,107 @@
+{
+  "kind": "collectionType",
+  "collectionName": "rfqs",
+  "info": {
+    "singularName": "rfq",
+    "pluralName": "rfqs",
+    "displayName": "RFQ (Request for Quotation)",
+    "description": "Collection type for RFQs in the platform"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "maxLength": 255
+    },
+    "description": {
+      "type": "richtext",
+      "required": true
+    },
+    "category": {
+      "type": "enumeration",
+      "enum": [
+        "construction",
+        "technology",
+        "manufacturing",
+        "services",
+        "healthcare",
+        "education",
+        "transportation",
+        "agriculture",
+        "energy",
+        "other"
+      ],
+      "required": true
+    },
+    "keywords": {
+      "type": "json",
+      "description": "Keywords for search and categorization"
+    },
+    "budget": {
+      "type": "decimal",
+      "min": 0
+    },
+    "currency": {
+      "type": "string",
+      "default": "SAR"
+    },
+    "deadline": {
+      "type": "datetime",
+      "required": true
+    },
+    "location": {
+      "type": "string"
+    },
+    "requirements": {
+      "type": "richtext"
+    },
+    "attachments": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": ["files"]
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "draft",
+        "published",
+        "closed",
+        "awarded"
+      ],
+      "default": "draft"
+    },
+    "isUrgent": {
+      "type": "boolean",
+      "default": false
+    },
+    "viewCount": {
+      "type": "integer",
+      "default": 0
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title"
+    },
+    "buyer": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::buyer.buyer",
+      "inversedBy": "rfqs"
+    },
+    "bids": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::bid.bid",
+      "mappedBy": "rfq"
+    },
+    "awardedBid": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::bid.bid"
+    }
+  }
+}

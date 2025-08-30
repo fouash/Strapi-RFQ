@@ -1,0 +1,108 @@
+{
+  "kind": "collectionType",
+  "collectionName": "disputes",
+  "info": {
+    "singularName": "dispute",
+    "pluralName": "disputes",
+    "displayName": "Dispute",
+    "description": "Dispute resolution system for RFQs and bids"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "maxLength": 255
+    },
+    "description": {
+      "type": "text",
+      "required": true
+    },
+    "disputeType": {
+      "type": "enumeration",
+      "enum": [
+        "payment",
+        "quality",
+        "delivery",
+        "communication",
+        "breach_of_contract",
+        "other"
+      ],
+      "required": true
+    },
+    "priority": {
+      "type": "enumeration",
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ],
+      "default": "medium"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "submitted",
+        "under_review",
+        "investigating",
+        "awaiting_response",
+        "resolved",
+        "closed",
+        "escalated"
+      ],
+      "default": "submitted"
+    },
+    "resolution": {
+      "type": "text"
+    },
+    "resolutionDate": {
+      "type": "datetime"
+    },
+    "evidence": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": ["files", "images"]
+    },
+    "adminNotes": {
+      "type": "text"
+    },
+    "estimatedResolutionTime": {
+      "type": "integer",
+      "description": "Estimated resolution time in hours"
+    },
+    "submitter": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "assignedAdmin": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "rfq": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::rfq.rfq"
+    },
+    "bid": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::bid.bid"
+    },
+    "involvedParties": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "plugin::users-permissions.user"
+    },
+    "messages": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::message.message"
+    }
+  }
+}

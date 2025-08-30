@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RFQ Platform - Request for Quotation System</title>
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="/" class="nav-brand">
+                    <img src="/favicon.png" alt="RFQ Platform" class="logo-image">
+                    <span class="logo-text">RFQ Platform</span>
+                </a>
+            </div>
+            
+            <div class="nav-menu">
+                <div class="nav-item dropdown">
+                    <button class="nav-link dropdown-toggle" data-toggle="dropdown">
+                        <i class="fas fa-th-list"></i> Categories
+                    </button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="/rfq?category=construction">Construction</a>
+                        <a class="dropdown-item" href="/rfq?category=technology">Technology</a>
+                        <a class="dropdown-item" href="/rfq?category=manufacturing">Manufacturing</a>
+                        <a class="dropdown-item" href="/rfq?category=services">Services</a>
+                        <a class="dropdown-item" href="/rfq?category=healthcare">Healthcare</a>
+                        <a class="dropdown-item" href="/rfq?category=education">Education</a>
+                        <a class="dropdown-item" href="/rfq?category=transportation">Transportation</a>
+                        <a class="dropdown-item" href="/rfq?category=agriculture">Agriculture</a>
+                        <a class="dropdown-item" href="/rfq?category=energy">Energy</a>
+                        <a class="dropdown-item" href="/rfq?category=other">Other</a>
+                    </div>
+                </div>
+                
+                <a class="nav-link" href="/rfq">
+                    <i class="fas fa-search"></i> Browse RFQs
+                </a>
+                
+                <div class="nav-item dropdown">
+                    <button class="nav-link dropdown-toggle" data-toggle="dropdown">
+                        <i class="fas fa-bell"></i> 
+                        <span class="notification-badge" id="notificationCount">0</span>
+                    </button>
+                    <div class="dropdown-menu notification-dropdown">
+                        <div class="dropdown-header">Notifications</div>
+                        <div id="notificationList">
+                            <div class="dropdown-item text-muted">No new notifications</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="nav-item dropdown user-dropdown">
+                    <button class="nav-link dropdown-toggle" data-toggle="dropdown" id="userMenuButton">
+                        <i class="fas fa-user-circle"></i> 
+                        <span id="userName">Guest</span>
+                    </button>
+                    <div class="dropdown-menu">
+                        <div class="auth-section" id="guestMenu">
+                            <a class="dropdown-item" href="#" onclick="showLoginModal()">
+                                <i class="fas fa-sign-in-alt"></i> Login
+                            </a>
+                            <a class="dropdown-item" href="#" onclick="showSignupModal()">
+                                <i class="fas fa-user-plus"></i> Sign Up
+                            </a>
+                        </div>
+                        <div class="auth-section hidden" id="userMenu">
+                            <a class="dropdown-item" href="/dashboard">
+                                <i class="fas fa-tachometer-alt"></i> Dashboard
+                            </a>
+                            <a class="dropdown-item" href="/profile" id="profileLink">
+                                <i class="fas fa-user"></i> My Profile
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#" onclick="logout()">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="nav-toggle" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="hero-section">
+            <div class="container">
+                <h1 class="hero-title">Welcome to RFQ Platform</h1>
+                <p class="hero-subtitle">Connect buyers and vendors through our comprehensive Request for Quotation system</p>
+                
+                <div class="hero-actions">
+                    <a href="/rfq" class="btn btn-primary">Browse RFQs</a>
+                    <a href="#" onclick="showSignupModal()" class="btn btn-outline">Get Started</a>
+                </div>
+                
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-number" id="totalRfqs">0</div>
+                        <div class="stat-label">Active RFQs</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="totalBuyers">0</div>
+                        <div class="stat-label">Registered Buyers</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="totalVendors">0</div>
+                        <div class="stat-label">Verified Vendors</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="features-section">
+            <div class="container">
+                <h2 class="section-title">Platform Features</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <i class="fas fa-file-contract feature-icon"></i>
+                        <h3>Create RFQs</h3>
+                        <p>Buyers can easily create detailed requests for quotations with attachments and specifications.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-handshake feature-icon"></i>
+                        <h3>Submit Bids</h3>
+                        <p>Vendors can submit competitive bids with proposals and delivery timelines.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-trophy feature-icon"></i>
+                        <h3>Award Process</h3>
+                        <p>Transparent awarding process to select the best vendor for your requirements.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-shield-alt feature-icon"></i>
+                        <h3>Saudi Compliance</h3>
+                        <p>Built-in validation for VAT, CR, and National Address requirements.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Login</h2>
+                <button class="modal-close" onclick="closeModal('loginModal')">&times;</button>
+            </div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" name="password" required>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Login</button>
+                    <a href="#" onclick="showSignupModal(); closeModal('loginModal');">Don't have an account? Sign up</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div class="modal" id="signupModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Sign Up</h2>
+                <button class="modal-close" onclick="closeModal('signupModal')">&times;</button>
+            </div>
+            <form id="signupForm">
+                <div class="form-group">
+                    <label for="userType">I am a:</label>
+                    <select id="userType" name="userType" required onchange="toggleUserTypeFields()">
+                        <option value="">Select User Type</option>
+                        <option value="buyer">Buyer</option>
+                        <option value="vendor">Vendor</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="signupEmail">Email</label>
+                    <input type="email" id="signupEmail" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupPassword">Password</label>
+                    <input type="password" id="signupPassword" name="password" required>
+                </div>
+                <div class="form-group">
+                    <label for="companyName">Company Name</label>
+                    <input type="text" id="companyName" name="companyName" required>
+                </div>
+                <div class="form-group">
+                    <label for="contactPerson">Contact Person</label>
+                    <input type="text" id="contactPerson" name="contactPerson" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone</label>
+                    <input type="tel" id="phone" name="phone" required>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Sign Up</button>
+                    <a href="#" onclick="showLoginModal(); closeModal('signupModal');">Already have an account? Login</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 RFQ Platform. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="/assets/js/main.js"></script>
+</body>
+</html>
