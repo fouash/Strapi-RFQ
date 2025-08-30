@@ -154,8 +154,8 @@ async function run(args: string[]): Promise<void> {
       '@strapi/strapi': version,
       '@strapi/plugin-users-permissions': version,
       '@strapi/plugin-cloud': version,
-      // third party
-      react: '^18.0.0',
+      // third party - using same versions as @strapi/strapi peer dependencies
+      react: '^18.0.0', // Note: While Strapi supports ^17.0.0 || ^18.0.0, new projects should use latest
       'react-dom': '^18.0.0',
       'react-router-dom': '^6.0.0',
       'styled-components': '^6.0.0',
